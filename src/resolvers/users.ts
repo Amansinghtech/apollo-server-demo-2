@@ -1,5 +1,7 @@
 import { Resolvers } from '@graphql'
 import UsersModel from '../models/UsersModel'
+import { BadUserInputError, ErrorHandler } from '../helpers/errors/ErrorHandler'
+import { UserExistsError } from '../helpers/errors/Users'
 
 const userResolvers: Resolvers = {
 	Query: {
@@ -17,23 +19,19 @@ const userResolvers: Resolvers = {
 		createUser: async (_, { form }) => {
 			try {
 				if (form.password.length < 8) {
-					return {
-						__typename: 'BadUserInput',
-						message: 'Password must be at least 8 characters',
-						code: 400,
-					}
+					throw new BadUserInputError('Password is too short')
 				}
-
 				const userExists = await UsersModel.exists({
 					email: form.email,
 				})
 
 				if (userExists) {
-					return {
-						__typename: 'UserExists',
-						message: 'User already exists',
-						email: form.email,
-					}
+					throw new UserExistsError('User already exists', form.email)
+					// return {
+					// 	__typename: 'UserExists',
+					// 	message: 'User already exists',
+					// 	email: form.email,
+					// }
 				}
 
 				const user = await UsersModel.create(form)
@@ -42,12 +40,7 @@ const userResolvers: Resolvers = {
 					...user.toObject(),
 				}
 			} catch (error) {
-				console.log(error)
-				return {
-					__typename: 'InternalServerError',
-					message: 'Internal server error',
-					code: 500,
-				}
+				return ErrorHandler.handle(error)
 			}
 		},
 		loginUser: async (_, { email, password }) => {
