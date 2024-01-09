@@ -1,0 +1,59 @@
+{
+	"name": "apollo-graphql-boilerplate",
+	"version": "1.0.0",
+	"description": "apollo graphql server with webpack, typescript 5.1.6, graphql codegen, and mongoose",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "npm run build:production",
+		"build:dev": "webpack --config webpack.development.js",
+		"build:development": "npm run build:dev",
+		"build:production": "webpack --config webpack.production.js",
+		"start": "node dist/server",
+		"dev": "nodemon --require dotenv/config dist/server",
+		"eslint": "./node_modules/eslint/bin/eslint.js src/*/**",
+		"devStart": "npm-run-all -p build:dev dev",
+		"codegen": "graphql-codegen --config codegen.ts"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/amansinghtech/Apollo-Graphql-Boilerplate.git"
+	},
+	"author": "Aman Singh",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/amansinghtech/Apollo-Graphql-Boilerplate/issues"
+	},
+	"homepage": "https://github.com/amansinghtech/Apollo-Graphql-Boilerplate#readme",
+	"devDependencies": {
+		"@graphql-codegen/cli": "5.0.0",
+		"@graphql-codegen/introspection": "4.0.0",
+		"@graphql-codegen/typescript": "4.0.1",
+		"@graphql-codegen/typescript-document-nodes": "4.0.1",
+		"@graphql-codegen/typescript-mongodb": "3.0.0",
+		"@graphql-codegen/typescript-resolvers": "4.0.1",
+		"@types/lodash": "^4.14.202",
+		"clean-webpack-plugin": "^4.0.0",
+		"nodemon": "^3.0.2",
+		"npm-run-all": "^4.1.5",
+		"ts-loader": "^9.5.1",
+		"typescript": "^5.3.3",
+		"webpack": "^5.89.0",
+		"webpack-cli": "^5.1.4",
+		"webpack-merge": "^5.10.0",
+		"webpack-node-externals": "^3.0.0"
+	},
+	"dependencies": {
+		"@apollo/server": "^4.10.0",
+		"@graphql-tools/graphql-file-loader": "^8.0.0",
+		"@graphql-tools/load": "^8.0.1",
+		"@graphql-tools/schema": "^10.0.2",
+		"dotenv": "^16.3.1",
+		"graphql": "^16.8.1",
+		"graphql-scalars": "^1.22.4",
+		"graphql-tag": "^2.12.6",
+		"lodash": "^4.17.21",
+		"mongoose": "^8.0.3",
+		"require-all": "^3.0.0"
+	}
+}
