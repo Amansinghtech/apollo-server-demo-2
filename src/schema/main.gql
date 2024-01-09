@@ -15,12 +15,4 @@ directive @serviceAccount on FIELD_DEFINITION
 
 type Query {
 	hello: String
-	getUser: User
-}
-
-type User {
-	name: String
-	email: Email
-	age: Int
-	lastLogin: Timestamp
 }

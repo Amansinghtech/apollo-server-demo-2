@@ -7,6 +7,7 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: 
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string; }
@@ -88,6 +89,29 @@ export type Scalars = {
   Void: { input: any; output: any; }
 };
 
+export enum Gender {
+  Female = 'Female',
+  Male = 'Male',
+  Others = 'Others'
+}
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  createUser?: Maybe<CreateUserRes>;
+  loginUser?: Maybe<LoginUserRes>;
+};
+
+
+export type MutationCreateUserArgs = {
+  form: UserInput;
+};
+
+
+export type MutationLoginUserArgs = {
+  email: Scalars['Email']['input'];
+  password: Scalars['String']['input'];
+};
+
 export type Query = {
   __typename?: 'Query';
   getUser?: Maybe<User>;
@@ -98,8 +122,33 @@ export type User = {
   __typename?: 'User';
   age?: Maybe<Scalars['Int']['output']>;
   email?: Maybe<Scalars['Email']['output']>;
-  lastLogin?: Maybe<Scalars['DateTimeISO']['output']>;
+  lastLogin?: Maybe<Scalars['Timestamp']['output']>;
   name?: Maybe<Scalars['String']['output']>;
+};
+
+export type UserInput = {
+  age?: InputMaybe<Scalars['Int']['input']>;
+  email: Scalars['Email']['input'];
+  gender?: InputMaybe<Gender>;
+  name: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+};
+
+export type CreateUserRes = {
+  __typename?: 'createUserRes';
+  code?: Maybe<Scalars['Int']['output']>;
+  message?: Maybe<Scalars['String']['output']>;
+  payload?: Maybe<User>;
+  success?: Maybe<Scalars['Boolean']['output']>;
+};
+
+export type LoginUserRes = {
+  __typename?: 'loginUserRes';
+  accessToken?: Maybe<Scalars['String']['output']>;
+  code?: Maybe<Scalars['Int']['output']>;
+  message?: Maybe<Scalars['String']['output']>;
+  payload?: Maybe<User>;
+  success?: Maybe<Scalars['Boolean']['output']>;
 };
 
 
@@ -191,6 +240,7 @@ export type ResolversTypes = {
   FilterLimit: ResolverTypeWrapper<Scalars['FilterLimit']['output']>;
   FilterSkip: ResolverTypeWrapper<Scalars['FilterSkip']['output']>;
   GUID: ResolverTypeWrapper<Scalars['GUID']['output']>;
+  Gender: Gender;
   HSL: ResolverTypeWrapper<Scalars['HSL']['output']>;
   HSLA: ResolverTypeWrapper<Scalars['HSLA']['output']>;
   HexColorCode: ResolverTypeWrapper<Scalars['HexColorCode']['output']>;
@@ -216,6 +266,7 @@ export type ResolversTypes = {
   Long: ResolverTypeWrapper<Scalars['Long']['output']>;
   Longitude: ResolverTypeWrapper<Scalars['Longitude']['output']>;
   MAC: ResolverTypeWrapper<Scalars['MAC']['output']>;
+  Mutation: ResolverTypeWrapper<{}>;
   NegativeFloat: ResolverTypeWrapper<Scalars['NegativeFloat']['output']>;
   NegativeInt: ResolverTypeWrapper<Scalars['NegativeInt']['output']>;
   NonEmptyString: ResolverTypeWrapper<Scalars['NonEmptyString']['output']>;
@@ -245,8 +296,11 @@ export type ResolversTypes = {
   UnsignedFloat: ResolverTypeWrapper<Scalars['UnsignedFloat']['output']>;
   UnsignedInt: ResolverTypeWrapper<Scalars['UnsignedInt']['output']>;
   User: ResolverTypeWrapper<User>;
+  UserInput: UserInput;
   UtcOffset: ResolverTypeWrapper<Scalars['UtcOffset']['output']>;
   Void: ResolverTypeWrapper<Scalars['Void']['output']>;
+  createUserRes: ResolverTypeWrapper<CreateUserRes>;
+  loginUserRes: ResolverTypeWrapper<LoginUserRes>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -294,6 +348,7 @@ export type ResolversParentTypes = {
   Long: Scalars['Long']['output'];
   Longitude: Scalars['Longitude']['output'];
   MAC: Scalars['MAC']['output'];
+  Mutation: {};
   NegativeFloat: Scalars['NegativeFloat']['output'];
   NegativeInt: Scalars['NegativeInt']['output'];
   NonEmptyString: Scalars['NonEmptyString']['output'];
@@ -323,8 +378,11 @@ export type ResolversParentTypes = {
   UnsignedFloat: Scalars['UnsignedFloat']['output'];
   UnsignedInt: Scalars['UnsignedInt']['output'];
   User: User;
+  UserInput: UserInput;
   UtcOffset: Scalars['UtcOffset']['output'];
   Void: Scalars['Void']['output'];
+  createUserRes: CreateUserRes;
+  loginUserRes: LoginUserRes;
 };
 
 export type AdminDirectiveArgs = { };
@@ -507,6 +565,11 @@ export interface MacScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes[
   name: 'MAC';
 }
 
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  createUser?: Resolver<Maybe<ResolversTypes['createUserRes']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'form'>>;
+  loginUser?: Resolver<Maybe<ResolversTypes['loginUserRes']>, ParentType, ContextType, RequireFields<MutationLoginUserArgs, 'email' | 'password'>>;
+};
+
 export interface NegativeFloatScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['NegativeFloat'], any> {
   name: 'NegativeFloat';
 }
@@ -619,7 +682,7 @@ export interface UnsignedIntScalarConfig extends GraphQLScalarTypeConfig<Resolve
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   age?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['Email']>, ParentType, ContextType>;
-  lastLogin?: Resolver<Maybe<ResolversTypes['DateTimeISO']>, ParentType, ContextType>;
+  lastLogin?: Resolver<Maybe<ResolversTypes['Timestamp']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -631,6 +694,23 @@ export interface UtcOffsetScalarConfig extends GraphQLScalarTypeConfig<Resolvers
 export interface VoidScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Void'], any> {
   name: 'Void';
 }
+
+export type CreateUserResResolvers<ContextType = any, ParentType extends ResolversParentTypes['createUserRes'] = ResolversParentTypes['createUserRes']> = {
+  code?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  payload?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  success?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type LoginUserResResolvers<ContextType = any, ParentType extends ResolversParentTypes['loginUserRes'] = ResolversParentTypes['loginUserRes']> = {
+  accessToken?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  code?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  payload?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  success?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
 
 export type Resolvers<ContextType = any> = {
   AccountNumber?: GraphQLScalarType;
@@ -674,6 +754,7 @@ export type Resolvers<ContextType = any> = {
   Long?: GraphQLScalarType;
   Longitude?: GraphQLScalarType;
   MAC?: GraphQLScalarType;
+  Mutation?: MutationResolvers<ContextType>;
   NegativeFloat?: GraphQLScalarType;
   NegativeInt?: GraphQLScalarType;
   NonEmptyString?: GraphQLScalarType;
@@ -704,6 +785,8 @@ export type Resolvers<ContextType = any> = {
   User?: UserResolvers<ContextType>;
   UtcOffset?: GraphQLScalarType;
   Void?: GraphQLScalarType;
+  createUserRes?: CreateUserResResolvers<ContextType>;
+  loginUserRes?: LoginUserResResolvers<ContextType>;
 };
 
 export type DirectiveResolvers<ContextType = any> = {

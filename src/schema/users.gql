@@ -1,0 +1,44 @@
+type User {
+	name: String
+	email: Email
+	age: Int
+	lastLogin: Timestamp
+}
+
+enum Gender {
+	Male
+	Female
+	Others
+}
+
+type Query {
+	getUser: User
+}
+
+type createUserRes {
+	code: Int
+	success: Boolean
+	message: String
+	payload: User
+}
+
+input UserInput {
+	name: String!
+	email: Email!
+	age: Int
+	gender: Gender
+	password: String!
+}
+
+type loginUserRes {
+	code: Int
+	success: Boolean
+	message: String
+	payload: User
+	accessToken: String
+}
+
+type Mutation {
+	createUser(form: UserInput!): createUserRes
+	loginUser(email: Email!, password: String!): loginUserRes
+}
