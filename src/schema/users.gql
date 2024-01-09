@@ -2,6 +2,7 @@ type User {
 	name: String
 	email: Email
 	age: Int
+	gender: Gender
 	lastLogin: Timestamp
 }
 
@@ -38,7 +39,14 @@ type loginUserRes {
 	accessToken: String
 }
 
+type UserExists {
+	message: String!
+	email: Email
+}
+
+union CreateUserResult = User | BadUserInput | UserExists | InternalServerError
+
 type Mutation {
-	createUser(form: UserInput!): createUserRes
+	createUser(form: UserInput!): CreateUserResult
 	loginUser(email: Email!, password: String!): loginUserRes
 }

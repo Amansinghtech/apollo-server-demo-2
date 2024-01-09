@@ -22,25 +22,23 @@ const userResolvers: Resolvers = {
 
 				if (userExists) {
 					return {
-						code: 400,
-						message: 'Email already exists',
-						success: false,
+						__typename: 'UserExists',
+						message: 'User already exists',
+						email: form.email,
 					}
 				}
 
 				const user = await UsersModel.create(form)
 				return {
-					code: 200,
-					message: 'User created',
-					success: true,
-					payload: user,
+					__typename: 'User',
+					...user.toObject(),
 				}
 			} catch (error) {
 				console.log(error)
 				return {
+					__typename: 'InternalServerError',
+					message: 'Internal server error',
 					code: 500,
-					message: 'Internal Server Error',
-					success: false,
 				}
 			}
 		},
