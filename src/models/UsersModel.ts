@@ -13,7 +13,11 @@ export interface UserDocument extends Document {
 	gender: Gender
 }
 
-const userSchema = new Schema<UserDocument>({
+interface Methods {
+	comparePassword: (password: string) => Promise<boolean>
+}
+
+const userSchema = new Schema<UserDocument, unknown, Methods>({
 	uid: { type: String, required: true, unique: true, default: v4 },
 	name: { type: String, required: true },
 	email: { type: String, required: true, unique: true },
@@ -35,4 +39,4 @@ userSchema.methods.comparePassword = async function (password) {
 	return await argon2.verify(this.password, password)
 }
 
-export default mongoose.model<UserDocument>('users', userSchema)
+export default mongoose.model('users', userSchema)

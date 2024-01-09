@@ -120,10 +120,12 @@ export type InternalServerError = Error & {
   message: Scalars['String']['output'];
 };
 
+export type LoginUserResult = BadUserInput | InternalServerError | NotFound | User;
+
 export type Mutation = {
   __typename?: 'Mutation';
   createUser?: Maybe<CreateUserResult>;
-  loginUser?: Maybe<LoginUserRes>;
+  loginUser?: Maybe<LoginUserResult>;
 };
 
 
@@ -265,6 +267,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping of union types */
 export type ResolversUnionTypes<RefType extends Record<string, unknown>> = {
   CreateUserResult: ( BadUserInput ) | ( InternalServerError ) | ( User ) | ( UserExists );
+  LoginUserResult: ( BadUserInput ) | ( InternalServerError ) | ( NotFound ) | ( User );
 };
 
 /** Mapping of interface types */
@@ -320,6 +323,7 @@ export type ResolversTypes = {
   LocalEndTime: ResolverTypeWrapper<Scalars['LocalEndTime']['output']>;
   LocalTime: ResolverTypeWrapper<Scalars['LocalTime']['output']>;
   Locale: ResolverTypeWrapper<Scalars['Locale']['output']>;
+  LoginUserResult: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['LoginUserResult']>;
   Long: ResolverTypeWrapper<Scalars['Long']['output']>;
   Longitude: ResolverTypeWrapper<Scalars['Longitude']['output']>;
   MAC: ResolverTypeWrapper<Scalars['MAC']['output']>;
@@ -410,6 +414,7 @@ export type ResolversParentTypes = {
   LocalEndTime: Scalars['LocalEndTime']['output'];
   LocalTime: Scalars['LocalTime']['output'];
   Locale: Scalars['Locale']['output'];
+  LoginUserResult: ResolversUnionTypes<ResolversParentTypes>['LoginUserResult'];
   Long: Scalars['Long']['output'];
   Longitude: Scalars['Longitude']['output'];
   MAC: Scalars['MAC']['output'];
@@ -649,6 +654,10 @@ export interface LocaleScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
   name: 'Locale';
 }
 
+export type LoginUserResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['LoginUserResult'] = ResolversParentTypes['LoginUserResult']> = {
+  __resolveType: TypeResolveFn<'BadUserInput' | 'InternalServerError' | 'NotFound' | 'User', ParentType, ContextType>;
+};
+
 export interface LongScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Long'], any> {
   name: 'Long';
 }
@@ -663,7 +672,7 @@ export interface MacScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes[
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createUser?: Resolver<Maybe<ResolversTypes['CreateUserResult']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'form'>>;
-  loginUser?: Resolver<Maybe<ResolversTypes['loginUserRes']>, ParentType, ContextType, RequireFields<MutationLoginUserArgs, 'email' | 'password'>>;
+  loginUser?: Resolver<Maybe<ResolversTypes['LoginUserResult']>, ParentType, ContextType, RequireFields<MutationLoginUserArgs, 'email' | 'password'>>;
 };
 
 export interface NegativeFloatScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['NegativeFloat'], any> {
@@ -871,6 +880,7 @@ export type Resolvers<ContextType = any> = {
   LocalEndTime?: GraphQLScalarType;
   LocalTime?: GraphQLScalarType;
   Locale?: GraphQLScalarType;
+  LoginUserResult?: LoginUserResultResolvers<ContextType>;
   Long?: GraphQLScalarType;
   Longitude?: GraphQLScalarType;
   MAC?: GraphQLScalarType;

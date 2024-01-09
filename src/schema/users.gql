@@ -39,6 +39,8 @@ type loginUserRes {
 	accessToken: String
 }
 
+union LoginUserResult = User | BadUserInput | NotFound | InternalServerError
+
 type UserExists {
 	message: String!
 	email: Email
@@ -48,5 +50,5 @@ union CreateUserResult = User | BadUserInput | UserExists | InternalServerError
 
 type Mutation {
 	createUser(form: UserInput!): CreateUserResult
-	loginUser(email: Email!, password: String!): loginUserRes
+	loginUser(email: Email!, password: String!): LoginUserResult
 }
