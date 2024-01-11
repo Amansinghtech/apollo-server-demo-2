@@ -96,6 +96,8 @@ export type BadUserInput = Error & {
   message: Scalars['String']['output'];
 };
 
+export type CreatePostResult = BadUserInput | Forbidden | InternalServerError | Post | Unauthorized;
+
 export type CreateUserResult = BadUserInput | InternalServerError | User | UserExists;
 
 export type Error = {
@@ -132,8 +134,14 @@ export type LoginUserResult = BadUserInput | InternalServerError | LoginUserData
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createPost: CreatePostResult;
   createUser?: Maybe<CreateUserResult>;
   loginUser?: Maybe<LoginUserResult>;
+};
+
+
+export type MutationCreatePostArgs = {
+  form: PostInput;
 };
 
 
@@ -151,6 +159,18 @@ export type NotFound = Error & {
   __typename?: 'NotFound';
   code: Scalars['Int']['output'];
   message: Scalars['String']['output'];
+};
+
+export type Post = {
+  __typename?: 'Post';
+  content: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  title: Scalars['String']['output'];
+};
+
+export type PostInput = {
+  content: Scalars['String']['input'];
+  title: Scalars['String']['input'];
 };
 
 export type Query = {
@@ -276,6 +296,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping of union types */
 export type ResolversUnionTypes<RefType extends Record<string, unknown>> = {
+  CreatePostResult: ( BadUserInput ) | ( Forbidden ) | ( InternalServerError ) | ( Post ) | ( Unauthorized );
   CreateUserResult: ( BadUserInput ) | ( InternalServerError ) | ( User ) | ( UserExists );
   LoginUserResult: ( BadUserInput ) | ( InternalServerError ) | ( LoginUserData ) | ( NotFound );
   UserResult: ( Forbidden ) | ( InternalServerError ) | ( NotFound ) | ( Unauthorized ) | ( User );
@@ -294,6 +315,7 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Byte: ResolverTypeWrapper<Scalars['Byte']['output']>;
   CountryCode: ResolverTypeWrapper<Scalars['CountryCode']['output']>;
+  CreatePostResult: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['CreatePostResult']>;
   CreateUserResult: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['CreateUserResult']>;
   Cuid: ResolverTypeWrapper<Scalars['Cuid']['output']>;
   Currency: ResolverTypeWrapper<Scalars['Currency']['output']>;
@@ -316,6 +338,7 @@ export type ResolversTypes = {
   HexColorCode: ResolverTypeWrapper<Scalars['HexColorCode']['output']>;
   Hexadecimal: ResolverTypeWrapper<Scalars['Hexadecimal']['output']>;
   IBAN: ResolverTypeWrapper<Scalars['IBAN']['output']>;
+  ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   IP: ResolverTypeWrapper<Scalars['IP']['output']>;
   IPCPatent: ResolverTypeWrapper<Scalars['IPCPatent']['output']>;
   IPv4: ResolverTypeWrapper<Scalars['IPv4']['output']>;
@@ -353,6 +376,8 @@ export type ResolversTypes = {
   Port: ResolverTypeWrapper<Scalars['Port']['output']>;
   PositiveFloat: ResolverTypeWrapper<Scalars['PositiveFloat']['output']>;
   PositiveInt: ResolverTypeWrapper<Scalars['PositiveInt']['output']>;
+  Post: ResolverTypeWrapper<Post>;
+  PostInput: PostInput;
   PostalCode: ResolverTypeWrapper<Scalars['PostalCode']['output']>;
   Query: ResolverTypeWrapper<{}>;
   RGB: ResolverTypeWrapper<Scalars['RGB']['output']>;
@@ -388,6 +413,7 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   Byte: Scalars['Byte']['output'];
   CountryCode: Scalars['CountryCode']['output'];
+  CreatePostResult: ResolversUnionTypes<ResolversParentTypes>['CreatePostResult'];
   CreateUserResult: ResolversUnionTypes<ResolversParentTypes>['CreateUserResult'];
   Cuid: Scalars['Cuid']['output'];
   Currency: Scalars['Currency']['output'];
@@ -409,6 +435,7 @@ export type ResolversParentTypes = {
   HexColorCode: Scalars['HexColorCode']['output'];
   Hexadecimal: Scalars['Hexadecimal']['output'];
   IBAN: Scalars['IBAN']['output'];
+  ID: Scalars['ID']['output'];
   IP: Scalars['IP']['output'];
   IPCPatent: Scalars['IPCPatent']['output'];
   IPv4: Scalars['IPv4']['output'];
@@ -446,6 +473,8 @@ export type ResolversParentTypes = {
   Port: Scalars['Port']['output'];
   PositiveFloat: Scalars['PositiveFloat']['output'];
   PositiveInt: Scalars['PositiveInt']['output'];
+  Post: Post;
+  PostInput: PostInput;
   PostalCode: Scalars['PostalCode']['output'];
   Query: {};
   RGB: Scalars['RGB']['output'];
@@ -510,6 +539,10 @@ export interface ByteScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 export interface CountryCodeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['CountryCode'], any> {
   name: 'CountryCode';
 }
+
+export type CreatePostResultResolvers<ContextType = Context, ParentType extends ResolversParentTypes['CreatePostResult'] = ResolversParentTypes['CreatePostResult']> = {
+  __resolveType: TypeResolveFn<'BadUserInput' | 'Forbidden' | 'InternalServerError' | 'Post' | 'Unauthorized', ParentType, ContextType>;
+};
 
 export type CreateUserResultResolvers<ContextType = Context, ParentType extends ResolversParentTypes['CreateUserResult'] = ResolversParentTypes['CreateUserResult']> = {
   __resolveType: TypeResolveFn<'BadUserInput' | 'InternalServerError' | 'User' | 'UserExists', ParentType, ContextType>;
@@ -693,6 +726,7 @@ export interface MacScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes[
 }
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  createPost?: Resolver<ResolversTypes['CreatePostResult'], ParentType, ContextType, RequireFields<MutationCreatePostArgs, 'form'>>;
   createUser?: Resolver<Maybe<ResolversTypes['CreateUserResult']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'form'>>;
   loginUser?: Resolver<Maybe<ResolversTypes['LoginUserResult']>, ParentType, ContextType, RequireFields<MutationLoginUserArgs, 'email' | 'password'>>;
 };
@@ -750,6 +784,13 @@ export interface PositiveFloatScalarConfig extends GraphQLScalarTypeConfig<Resol
 export interface PositiveIntScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['PositiveInt'], any> {
   name: 'PositiveInt';
 }
+
+export type PostResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = {
+  content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
 
 export interface PostalCodeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['PostalCode'], any> {
   name: 'PostalCode';
@@ -868,6 +909,7 @@ export type Resolvers<ContextType = Context> = {
   BigInt?: GraphQLScalarType;
   Byte?: GraphQLScalarType;
   CountryCode?: GraphQLScalarType;
+  CreatePostResult?: CreatePostResultResolvers<ContextType>;
   CreateUserResult?: CreateUserResultResolvers<ContextType>;
   Cuid?: GraphQLScalarType;
   Currency?: GraphQLScalarType;
@@ -925,6 +967,7 @@ export type Resolvers<ContextType = Context> = {
   Port?: GraphQLScalarType;
   PositiveFloat?: GraphQLScalarType;
   PositiveInt?: GraphQLScalarType;
+  Post?: PostResolvers<ContextType>;
   PostalCode?: GraphQLScalarType;
   Query?: QueryResolvers<ContextType>;
   RGB?: GraphQLScalarType;

@@ -4,6 +4,6 @@ export const vars = {
 	ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET! || 'thisisasecret',
 	REFRESH_TOKEN_SECRET:
 		process.env.REFRESH_TOKEN_SECRET! || 'thisissupersecret',
-	AT_EXPIRY: process.env.AT_EXPIRY! || '1s',
+	AT_EXPIRY: process.env.AT_EXPIRY! || '1d',
 	RT_EXPIRY: process.env.RT_EXPIRY! || '7d',
 }

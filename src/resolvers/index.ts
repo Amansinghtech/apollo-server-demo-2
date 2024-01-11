@@ -3,6 +3,7 @@ import { GraphQLScalarType, GraphQLError, Kind } from 'graphql'
 import { Resolvers } from '../generated/graphql'
 import HelloResolvers from './hello'
 import userResolvers from './users'
+import postResolvers from './posts'
 
 import { resolvers as GraphqlScalarResolvers } from 'graphql-scalars'
 
@@ -138,5 +139,6 @@ export default merge(
 	resolvers,
 	HelloResolvers,
 	GraphqlScalarResolvers,
-	userResolvers
+	userResolvers,
+	postResolvers
 )
