@@ -12,10 +12,6 @@ enum Gender {
 	Others
 }
 
-type Query {
-	getUser: User
-}
-
 type createUserRes {
 	code: Int
 	success: Boolean
@@ -61,4 +57,15 @@ union CreateUserResult = User | BadUserInput | UserExists | InternalServerError
 type Mutation {
 	createUser(form: UserInput!): CreateUserResult
 	loginUser(email: Email!, password: String!): LoginUserResult
+}
+
+union UserResult =
+	  User
+	| NotFound
+	| InternalServerError
+	| Unauthorized
+	| Forbidden
+
+type Query {
+	getUser(token: String): UserResult!
 }

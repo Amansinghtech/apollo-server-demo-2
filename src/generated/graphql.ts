@@ -154,8 +154,13 @@ export type NotFound = Error & {
 
 export type Query = {
   __typename?: 'Query';
-  getUser?: Maybe<User>;
+  getUser: UserResult;
   hello?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type QueryGetUserArgs = {
+  token?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Unauthorized = Error & {
@@ -186,6 +191,8 @@ export type UserInput = {
   name: Scalars['String']['input'];
   password: Scalars['String']['input'];
 };
+
+export type UserResult = Forbidden | InternalServerError | NotFound | Unauthorized | User;
 
 export type CreateUserRes = {
   __typename?: 'createUserRes';
@@ -275,6 +282,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversUnionTypes<RefType extends Record<string, unknown>> = {
   CreateUserResult: ( BadUserInput ) | ( InternalServerError ) | ( User ) | ( UserExists );
   LoginUserResult: ( BadUserInput ) | ( InternalServerError ) | ( LoginUserData ) | ( NotFound );
+  UserResult: ( Forbidden ) | ( InternalServerError ) | ( NotFound ) | ( Unauthorized ) | ( User );
 };
 
 /** Mapping of interface types */
@@ -369,6 +377,7 @@ export type ResolversTypes = {
   User: ResolverTypeWrapper<User>;
   UserExists: ResolverTypeWrapper<UserExists>;
   UserInput: UserInput;
+  UserResult: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['UserResult']>;
   UtcOffset: ResolverTypeWrapper<Scalars['UtcOffset']['output']>;
   Void: ResolverTypeWrapper<Scalars['Void']['output']>;
   createUserRes: ResolverTypeWrapper<CreateUserRes>;
@@ -461,6 +470,7 @@ export type ResolversParentTypes = {
   User: User;
   UserExists: UserExists;
   UserInput: UserInput;
+  UserResult: ResolversUnionTypes<ResolversParentTypes>['UserResult'];
   UtcOffset: Scalars['UtcOffset']['output'];
   Void: Scalars['Void']['output'];
   createUserRes: CreateUserRes;
@@ -750,7 +760,7 @@ export interface PostalCodeScalarConfig extends GraphQLScalarTypeConfig<Resolver
 }
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  getUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  getUser?: Resolver<ResolversTypes['UserResult'], ParentType, ContextType, Partial<QueryGetUserArgs>>;
   hello?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 };
 
@@ -825,6 +835,10 @@ export type UserExistsResolvers<ContextType = any, ParentType extends ResolversP
   email?: Resolver<Maybe<ResolversTypes['Email']>, ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserResult'] = ResolversParentTypes['UserResult']> = {
+  __resolveType: TypeResolveFn<'Forbidden' | 'InternalServerError' | 'NotFound' | 'Unauthorized' | 'User', ParentType, ContextType>;
 };
 
 export interface UtcOffsetScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['UtcOffset'], any> {
@@ -933,6 +947,7 @@ export type Resolvers<ContextType = any> = {
   UnsignedInt?: GraphQLScalarType;
   User?: UserResolvers<ContextType>;
   UserExists?: UserExistsResolvers<ContextType>;
+  UserResult?: UserResultResolvers<ContextType>;
   UtcOffset?: GraphQLScalarType;
   Void?: GraphQLScalarType;
   createUserRes?: CreateUserResResolvers<ContextType>;

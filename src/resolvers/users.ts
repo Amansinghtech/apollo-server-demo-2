@@ -2,16 +2,40 @@ import { Resolvers } from '@graphql'
 import UsersModel from '../models/UsersModel'
 import { BadUserInputError, ErrorHandler } from '../helpers/errors/ErrorHandler'
 import { UserExistsError } from '../helpers/errors/Users'
-import { createAccessToken, createRefreshToken } from '../controller/auth'
+import {
+	createAccessToken,
+	createRefreshToken,
+	verifyAccessToken,
+	TokenError,
+	tokenIsError,
+} from '../controller/auth'
 
 const userResolvers: Resolvers = {
 	Query: {
-		getUser: async () => {
+		getUser: async (_, { token }) => {
+			const tokenData = verifyAccessToken(token)
+
+			if (tokenIsError(tokenData)) {
+				return {
+					__typename: 'Unauthorized',
+					code: 401,
+					message: tokenData.name,
+				}
+			}
+
+			const user = await UsersModel.findOne({ uid: tokenData.uid })
+
+			if (!user) {
+				return {
+					__typename: 'NotFound',
+					code: 404,
+					message: 'User not found',
+				}
+			}
+
 			return {
-				name: 'John',
-				email: 'John@example.com',
-				age: 20,
-				lastLogin: new Date(),
+				__typename: 'User',
+				...(user.toObject() as any),
 			}
 		},
 	},
