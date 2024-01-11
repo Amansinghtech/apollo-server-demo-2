@@ -11,6 +11,7 @@ export interface UserDocument extends Document {
 	lastLogin: Date
 	age: number
 	gender: Gender
+	refreshToken: string
 }
 
 interface Methods {
@@ -25,6 +26,7 @@ const userSchema = new Schema<UserDocument, unknown, Methods>({
 	lastLogin: { type: Date, required: true, default: Date.now },
 	age: { type: Number },
 	gender: { type: String, enum: Object.values(Gender) },
+	refreshToken: { type: String },
 })
 
 // hash password before saving

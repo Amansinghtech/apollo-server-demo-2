@@ -120,7 +120,14 @@ export type InternalServerError = Error & {
   message: Scalars['String']['output'];
 };
 
-export type LoginUserResult = BadUserInput | InternalServerError | NotFound | User;
+export type LoginUserData = {
+  __typename?: 'LoginUserData';
+  accessToken: Scalars['String']['output'];
+  refreshToken: Scalars['String']['output'];
+  user: User;
+};
+
+export type LoginUserResult = BadUserInput | InternalServerError | LoginUserData | NotFound;
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -162,7 +169,7 @@ export type User = {
   age?: Maybe<Scalars['Int']['output']>;
   email?: Maybe<Scalars['Email']['output']>;
   gender?: Maybe<Gender>;
-  lastLogin?: Maybe<Scalars['Timestamp']['output']>;
+  lastLogin?: Maybe<Scalars['DateTimeISO']['output']>;
   name?: Maybe<Scalars['String']['output']>;
 };
 
@@ -267,7 +274,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping of union types */
 export type ResolversUnionTypes<RefType extends Record<string, unknown>> = {
   CreateUserResult: ( BadUserInput ) | ( InternalServerError ) | ( User ) | ( UserExists );
-  LoginUserResult: ( BadUserInput ) | ( InternalServerError ) | ( NotFound ) | ( User );
+  LoginUserResult: ( BadUserInput ) | ( InternalServerError ) | ( LoginUserData ) | ( NotFound );
 };
 
 /** Mapping of interface types */
@@ -323,6 +330,7 @@ export type ResolversTypes = {
   LocalEndTime: ResolverTypeWrapper<Scalars['LocalEndTime']['output']>;
   LocalTime: ResolverTypeWrapper<Scalars['LocalTime']['output']>;
   Locale: ResolverTypeWrapper<Scalars['Locale']['output']>;
+  LoginUserData: ResolverTypeWrapper<LoginUserData>;
   LoginUserResult: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['LoginUserResult']>;
   Long: ResolverTypeWrapper<Scalars['Long']['output']>;
   Longitude: ResolverTypeWrapper<Scalars['Longitude']['output']>;
@@ -414,6 +422,7 @@ export type ResolversParentTypes = {
   LocalEndTime: Scalars['LocalEndTime']['output'];
   LocalTime: Scalars['LocalTime']['output'];
   Locale: Scalars['Locale']['output'];
+  LoginUserData: LoginUserData;
   LoginUserResult: ResolversUnionTypes<ResolversParentTypes>['LoginUserResult'];
   Long: Scalars['Long']['output'];
   Longitude: Scalars['Longitude']['output'];
@@ -654,8 +663,15 @@ export interface LocaleScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
   name: 'Locale';
 }
 
+export type LoginUserDataResolvers<ContextType = any, ParentType extends ResolversParentTypes['LoginUserData'] = ResolversParentTypes['LoginUserData']> = {
+  accessToken?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  refreshToken?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type LoginUserResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['LoginUserResult'] = ResolversParentTypes['LoginUserResult']> = {
-  __resolveType: TypeResolveFn<'BadUserInput' | 'InternalServerError' | 'NotFound' | 'User', ParentType, ContextType>;
+  __resolveType: TypeResolveFn<'BadUserInput' | 'InternalServerError' | 'LoginUserData' | 'NotFound', ParentType, ContextType>;
 };
 
 export interface LongScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Long'], any> {
@@ -800,7 +816,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   age?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['Email']>, ParentType, ContextType>;
   gender?: Resolver<Maybe<ResolversTypes['Gender']>, ParentType, ContextType>;
-  lastLogin?: Resolver<Maybe<ResolversTypes['Timestamp']>, ParentType, ContextType>;
+  lastLogin?: Resolver<Maybe<ResolversTypes['DateTimeISO']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -880,6 +896,7 @@ export type Resolvers<ContextType = any> = {
   LocalEndTime?: GraphQLScalarType;
   LocalTime?: GraphQLScalarType;
   Locale?: GraphQLScalarType;
+  LoginUserData?: LoginUserDataResolvers<ContextType>;
   LoginUserResult?: LoginUserResultResolvers<ContextType>;
   Long?: GraphQLScalarType;
   Longitude?: GraphQLScalarType;

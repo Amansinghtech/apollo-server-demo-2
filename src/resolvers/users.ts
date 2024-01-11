@@ -2,6 +2,7 @@ import { Resolvers } from '@graphql'
 import UsersModel from '../models/UsersModel'
 import { BadUserInputError, ErrorHandler } from '../helpers/errors/ErrorHandler'
 import { UserExistsError } from '../helpers/errors/Users'
+import { createAccessToken, createRefreshToken } from '../controller/auth'
 
 const userResolvers: Resolvers = {
 	Query: {
@@ -65,9 +66,23 @@ const userResolvers: Resolvers = {
 					}
 				}
 
+				/* create access token and refresh token */
+
+				const AT = createAccessToken(user.email, user.uid)
+				const RT = createRefreshToken(user.email, user.uid)
+
+				/* Update refresh token */
+				user.refreshToken = RT.token
+
+				/* Update last login */
+				user.lastLogin = new Date()
+				await user.save()
+
 				return {
-					__typename: 'User',
-					...user.toObject(),
+					__typename: 'LoginUserData',
+					accessToken: AT.token,
+					refreshToken: RT.token,
+					user,
 				}
 			} catch (error) {
 				console.log(error)

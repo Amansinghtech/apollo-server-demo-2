@@ -685,6 +685,65 @@
         "possibleTypes": null
       },
       {
+        "kind": "OBJECT",
+        "name": "LoginUserData",
+        "description": null,
+        "fields": [
+          {
+            "name": "accessToken",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "refreshToken",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "user",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "User",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
         "kind": "UNION",
         "name": "LoginUserResult",
         "description": null,
@@ -705,12 +764,12 @@
           },
           {
             "kind": "OBJECT",
-            "name": "NotFound",
+            "name": "LoginUserData",
             "ofType": null
           },
           {
             "kind": "OBJECT",
-            "name": "User",
+            "name": "NotFound",
             "ofType": null
           }
         ]
@@ -1280,7 +1339,7 @@
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "Timestamp",
+              "name": "DateTimeISO",
               "ofType": null
             },
             "isDeprecated": false,

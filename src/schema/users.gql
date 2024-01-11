@@ -3,7 +3,7 @@ type User {
 	email: Email
 	age: Int
 	gender: Gender
-	lastLogin: Timestamp
+	lastLogin: DateTimeISO
 }
 
 enum Gender {
@@ -39,7 +39,17 @@ type loginUserRes {
 	accessToken: String
 }
 
-union LoginUserResult = User | BadUserInput | NotFound | InternalServerError
+type LoginUserData {
+	user: User!
+	accessToken: String!
+	refreshToken: String!
+}
+
+union LoginUserResult =
+	  LoginUserData
+	| BadUserInput
+	| NotFound
+	| InternalServerError
 
 type UserExists {
 	message: String!
