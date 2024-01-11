@@ -1,4 +1,5 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
+import { Context } from '../context';
 import gql from 'graphql-tag';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -156,11 +157,6 @@ export type Query = {
   __typename?: 'Query';
   getUser: UserResult;
   hello?: Maybe<Scalars['String']['output']>;
-};
-
-
-export type QueryGetUserArgs = {
-  token?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Unauthorized = Error & {
@@ -479,25 +475,25 @@ export type ResolversParentTypes = {
 
 export type AdminDirectiveArgs = { };
 
-export type AdminDirectiveResolver<Result, Parent, ContextType = any, Args = AdminDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+export type AdminDirectiveResolver<Result, Parent, ContextType = Context, Args = AdminDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export type AuthDirectiveArgs = { };
 
-export type AuthDirectiveResolver<Result, Parent, ContextType = any, Args = AuthDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+export type AuthDirectiveResolver<Result, Parent, ContextType = Context, Args = AuthDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export type ServiceAccountDirectiveArgs = { };
 
-export type ServiceAccountDirectiveResolver<Result, Parent, ContextType = any, Args = ServiceAccountDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+export type ServiceAccountDirectiveResolver<Result, Parent, ContextType = Context, Args = ServiceAccountDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export type UpperDirectiveArgs = { };
 
-export type UpperDirectiveResolver<Result, Parent, ContextType = any, Args = UpperDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+export type UpperDirectiveResolver<Result, Parent, ContextType = Context, Args = UpperDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export interface AccountNumberScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['AccountNumber'], any> {
   name: 'AccountNumber';
 }
 
-export type BadUserInputResolvers<ContextType = any, ParentType extends ResolversParentTypes['BadUserInput'] = ResolversParentTypes['BadUserInput']> = {
+export type BadUserInputResolvers<ContextType = Context, ParentType extends ResolversParentTypes['BadUserInput'] = ResolversParentTypes['BadUserInput']> = {
   code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -515,7 +511,7 @@ export interface CountryCodeScalarConfig extends GraphQLScalarTypeConfig<Resolve
   name: 'CountryCode';
 }
 
-export type CreateUserResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateUserResult'] = ResolversParentTypes['CreateUserResult']> = {
+export type CreateUserResultResolvers<ContextType = Context, ParentType extends ResolversParentTypes['CreateUserResult'] = ResolversParentTypes['CreateUserResult']> = {
   __resolveType: TypeResolveFn<'BadUserInput' | 'InternalServerError' | 'User' | 'UserExists', ParentType, ContextType>;
 };
 
@@ -559,7 +555,7 @@ export interface EmailAddressScalarConfig extends GraphQLScalarTypeConfig<Resolv
   name: 'EmailAddress';
 }
 
-export type ErrorResolvers<ContextType = any, ParentType extends ResolversParentTypes['Error'] = ResolversParentTypes['Error']> = {
+export type ErrorResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Error'] = ResolversParentTypes['Error']> = {
   __resolveType: TypeResolveFn<'BadUserInput' | 'Forbidden' | 'InternalServerError' | 'NotFound' | 'Unauthorized', ParentType, ContextType>;
   code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -573,7 +569,7 @@ export interface FilterSkipScalarConfig extends GraphQLScalarTypeConfig<Resolver
   name: 'FilterSkip';
 }
 
-export type ForbiddenResolvers<ContextType = any, ParentType extends ResolversParentTypes['Forbidden'] = ResolversParentTypes['Forbidden']> = {
+export type ForbiddenResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Forbidden'] = ResolversParentTypes['Forbidden']> = {
   code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -627,7 +623,7 @@ export interface Iso8601DurationScalarConfig extends GraphQLScalarTypeConfig<Res
   name: 'ISO8601Duration';
 }
 
-export type InternalServerErrorResolvers<ContextType = any, ParentType extends ResolversParentTypes['InternalServerError'] = ResolversParentTypes['InternalServerError']> = {
+export type InternalServerErrorResolvers<ContextType = Context, ParentType extends ResolversParentTypes['InternalServerError'] = ResolversParentTypes['InternalServerError']> = {
   code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -673,14 +669,14 @@ export interface LocaleScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
   name: 'Locale';
 }
 
-export type LoginUserDataResolvers<ContextType = any, ParentType extends ResolversParentTypes['LoginUserData'] = ResolversParentTypes['LoginUserData']> = {
+export type LoginUserDataResolvers<ContextType = Context, ParentType extends ResolversParentTypes['LoginUserData'] = ResolversParentTypes['LoginUserData']> = {
   accessToken?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   refreshToken?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type LoginUserResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['LoginUserResult'] = ResolversParentTypes['LoginUserResult']> = {
+export type LoginUserResultResolvers<ContextType = Context, ParentType extends ResolversParentTypes['LoginUserResult'] = ResolversParentTypes['LoginUserResult']> = {
   __resolveType: TypeResolveFn<'BadUserInput' | 'InternalServerError' | 'LoginUserData' | 'NotFound', ParentType, ContextType>;
 };
 
@@ -696,7 +692,7 @@ export interface MacScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes[
   name: 'MAC';
 }
 
-export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createUser?: Resolver<Maybe<ResolversTypes['CreateUserResult']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'form'>>;
   loginUser?: Resolver<Maybe<ResolversTypes['LoginUserResult']>, ParentType, ContextType, RequireFields<MutationLoginUserArgs, 'email' | 'password'>>;
 };
@@ -729,7 +725,7 @@ export interface NonPositiveIntScalarConfig extends GraphQLScalarTypeConfig<Reso
   name: 'NonPositiveInt';
 }
 
-export type NotFoundResolvers<ContextType = any, ParentType extends ResolversParentTypes['NotFound'] = ResolversParentTypes['NotFound']> = {
+export type NotFoundResolvers<ContextType = Context, ParentType extends ResolversParentTypes['NotFound'] = ResolversParentTypes['NotFound']> = {
   code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -759,8 +755,8 @@ export interface PostalCodeScalarConfig extends GraphQLScalarTypeConfig<Resolver
   name: 'PostalCode';
 }
 
-export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  getUser?: Resolver<ResolversTypes['UserResult'], ParentType, ContextType, Partial<QueryGetUserArgs>>;
+export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  getUser?: Resolver<ResolversTypes['UserResult'], ParentType, ContextType>;
   hello?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 };
 
@@ -808,7 +804,7 @@ export interface UuidScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
   name: 'UUID';
 }
 
-export type UnauthorizedResolvers<ContextType = any, ParentType extends ResolversParentTypes['Unauthorized'] = ResolversParentTypes['Unauthorized']> = {
+export type UnauthorizedResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Unauthorized'] = ResolversParentTypes['Unauthorized']> = {
   code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -822,7 +818,7 @@ export interface UnsignedIntScalarConfig extends GraphQLScalarTypeConfig<Resolve
   name: 'UnsignedInt';
 }
 
-export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+export type UserResolvers<ContextType = Context, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   age?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['Email']>, ParentType, ContextType>;
   gender?: Resolver<Maybe<ResolversTypes['Gender']>, ParentType, ContextType>;
@@ -831,13 +827,13 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type UserExistsResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserExists'] = ResolversParentTypes['UserExists']> = {
+export type UserExistsResolvers<ContextType = Context, ParentType extends ResolversParentTypes['UserExists'] = ResolversParentTypes['UserExists']> = {
   email?: Resolver<Maybe<ResolversTypes['Email']>, ParentType, ContextType>;
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type UserResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserResult'] = ResolversParentTypes['UserResult']> = {
+export type UserResultResolvers<ContextType = Context, ParentType extends ResolversParentTypes['UserResult'] = ResolversParentTypes['UserResult']> = {
   __resolveType: TypeResolveFn<'Forbidden' | 'InternalServerError' | 'NotFound' | 'Unauthorized' | 'User', ParentType, ContextType>;
 };
 
@@ -849,7 +845,7 @@ export interface VoidScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
   name: 'Void';
 }
 
-export type CreateUserResResolvers<ContextType = any, ParentType extends ResolversParentTypes['createUserRes'] = ResolversParentTypes['createUserRes']> = {
+export type CreateUserResResolvers<ContextType = Context, ParentType extends ResolversParentTypes['createUserRes'] = ResolversParentTypes['createUserRes']> = {
   code?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   payload?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
@@ -857,7 +853,7 @@ export type CreateUserResResolvers<ContextType = any, ParentType extends Resolve
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type LoginUserResResolvers<ContextType = any, ParentType extends ResolversParentTypes['loginUserRes'] = ResolversParentTypes['loginUserRes']> = {
+export type LoginUserResResolvers<ContextType = Context, ParentType extends ResolversParentTypes['loginUserRes'] = ResolversParentTypes['loginUserRes']> = {
   accessToken?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   code?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -866,7 +862,7 @@ export type LoginUserResResolvers<ContextType = any, ParentType extends Resolver
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type Resolvers<ContextType = any> = {
+export type Resolvers<ContextType = Context> = {
   AccountNumber?: GraphQLScalarType;
   BadUserInput?: BadUserInputResolvers<ContextType>;
   BigInt?: GraphQLScalarType;
@@ -954,7 +950,7 @@ export type Resolvers<ContextType = any> = {
   loginUserRes?: LoginUserResResolvers<ContextType>;
 };
 
-export type DirectiveResolvers<ContextType = any> = {
+export type DirectiveResolvers<ContextType = Context> = {
   admin?: AdminDirectiveResolver<any, any, ContextType>;
   auth?: AuthDirectiveResolver<any, any, ContextType>;
   serviceAccount?: ServiceAccountDirectiveResolver<any, any, ContextType>;

@@ -67,5 +67,5 @@ union UserResult =
 	| Forbidden
 
 type Query {
-	getUser(token: String): UserResult!
+	getUser: UserResult! @auth
 }

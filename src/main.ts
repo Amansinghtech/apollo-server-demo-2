@@ -4,11 +4,14 @@ import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader'
 import { loadSchemaSync } from '@graphql-tools/load'
 import { makeExecutableSchema } from '@graphql-tools/schema'
 import { typeDefs as GraphqlScalarType } from 'graphql-scalars'
-
-import Resolvers from './resolvers/index'
 import mongoose from 'mongoose'
-import { vars } from './env'
 import { networkInterfaces } from 'os'
+
+import { TokenResult, verifyAccessToken } from './controller/auth'
+import { vars } from './env'
+import UsersModel, { UserDocument } from './models/UsersModel'
+import Resolvers from './resolvers'
+import { authDirectiveTransform } from './directives/authDirective'
 
 const typeDefs = loadSchemaSync('src/schema/**/*.gql', {
 	loaders: [new GraphQLFileLoader()],
@@ -20,6 +23,8 @@ let mods = makeExecutableSchema({
 	typeDefs: [typeDefs, GraphqlScalarType],
 	resolvers: Resolvers,
 })
+
+mods = authDirectiveTransform(mods, 'auth')
 
 async function main() {
 	console.log('Starting server...')
@@ -35,8 +40,16 @@ async function main() {
 
 			const { url } = await startStandaloneServer(server, {
 				context: async ({ req }) => {
+					const authorization = req.headers.authorization
+
+					let token: TokenResult
+					let user: UserDocument
+					token = verifyAccessToken(authorization)
+
 					return {
-						req,
+						authorization,
+						token,
+						user,
 					}
 				},
 				listen: {

@@ -33,13 +33,13 @@ export type TokenError = {
 	name: 'TokenExpiredError' | 'JsonWebTokenError' | 'NotBeforeError'
 }
 
-export function tokenIsError(
-	token: TokenData | TokenError
-): token is TokenError {
+export type TokenResult = TokenData | TokenError
+
+export function tokenIsError(token: TokenResult): token is TokenError {
 	return (token as TokenError).name !== undefined
 }
 
-export function verifyAccessToken(token: string): TokenData | TokenError {
+export function verifyAccessToken(token: string): TokenResult {
 	try {
 		const decoded = jwt.verify(token, vars.ACCESS_TOKEN_SECRET)
 		return decoded as TokenData

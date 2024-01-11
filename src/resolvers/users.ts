@@ -12,30 +12,10 @@ import {
 
 const userResolvers: Resolvers = {
 	Query: {
-		getUser: async (_, { token }) => {
-			const tokenData = verifyAccessToken(token)
-
-			if (tokenIsError(tokenData)) {
-				return {
-					__typename: 'Unauthorized',
-					code: 401,
-					message: tokenData.name,
-				}
-			}
-
-			const user = await UsersModel.findOne({ uid: tokenData.uid })
-
-			if (!user) {
-				return {
-					__typename: 'NotFound',
-					code: 404,
-					message: 'User not found',
-				}
-			}
-
+		getUser: async (_, __, context) => {
 			return {
 				__typename: 'User',
-				...(user.toObject() as any),
+				...(context.user.toObject() as any),
 			}
 		},
 	},
